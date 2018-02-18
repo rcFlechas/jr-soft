@@ -89,25 +89,46 @@ jQuery(document).ready(function($) {
       }
     });
     if (ferror) return false;
-    else var str = $(this).serialize();
-    $.ajax({
-      type: "POST",
-      url: "contactform/contactform.php",
-      data: str,
-      success: function(msg) {
-        // alert(msg);
-        if (msg == 'OK') {
-          $("#sendmessage").addClass("show");
-          $("#errormessage").removeClass("show");
-          $('.contactForm').find("input, textarea").val("");
-        } else {
-          $("#sendmessage").removeClass("show");
-          $("#errormessage").addClass("show");
-          $('#errormessage').html(msg);
-        }
+    else {
 
-      }
-    });
+        var m = "Nombre: "+$("#name").val()+" \n Correo: "+$("#email").val()+" \n Mensaje: " + $("#message").val();
+
+        var str = {
+          host: "cp2.astrahosting.com",
+          puerto: "587",
+          usuario: "contacto@servifix.co",
+          clave: "servifix.2018",
+          asunto: $("#subject").val(),
+          mensaje: m,
+          destinatarios: ["rcflechas@gmail.com","jhonny.jdt18@gmail.com"]
+        };
+
+      $.ajax({
+        headers: { 
+          Accept: 'application/json',
+          'Content-Type': 'application/json' 
+        },
+        type: "POST",
+        url: "https://enviaremail.herokuapp.com/email/masivo",
+        //url: "http://localhost:8080/email/masivo",
+        data: JSON.stringify(str),        
+        dataType: 'json',
+        //contentType: "application/json",
+        //traditional: true,
+        success: function(msg) {          
+          if (msg == 'OK') {
+            $("#sendmessage").addClass("show");
+            $("#errormessage").removeClass("show");
+            $('.contactForm').find("input, textarea").val("");
+          } else {
+            $("#sendmessage").removeClass("show");
+            $("#errormessage").addClass("show");
+            $('#errormessage').html(msg);
+          }
+
+        }
+      });
+    } 
     return false;
   });
 
