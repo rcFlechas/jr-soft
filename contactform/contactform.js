@@ -114,9 +114,10 @@ jQuery(document).ready(function($) {
         data: JSON.stringify(str),        
         dataType: 'json',
         //contentType: "application/json",
-        //traditional: true,
-        success: function(msg) {          
-          if (msg == 'OK') {
+        //traditional: true,       
+        complete: function(xhr, statusText){
+          var status = xhr.status;
+          if (status == 200) {
             $("#sendmessage").addClass("show");
             $("#errormessage").removeClass("show");
             $('.contactForm').find("input, textarea").val("");
@@ -125,7 +126,6 @@ jQuery(document).ready(function($) {
             $("#errormessage").addClass("show");
             $('#errormessage').html(msg);
           }
-
         }
       });
     } 
